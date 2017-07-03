@@ -42,6 +42,24 @@ font-size:24px;
 color:#EEEEEE;
 }
             </style>
+            
+            
+<?php
+//File to read
+$file = '/sys/devices/w1_bus_master1/10-000802292522/w1_slave';
+
+//Read the file line by line
+$lines = file($file);
+
+//Get the temp from second line 
+$temp = explode('=', $lines[1]);
+
+//Setup some nice formatting (i.e. 21,3)
+$temp = number_format($temp[1] / 1000, 1, ',', '');
+
+//And echo that temp
+echo $temp . " °C";
+?>
 </head>
 	<body onload="updateClock(); setInterval('updateClock()', 1000 )">
 
@@ -51,5 +69,6 @@ color:#EEEEEE;
         	
     <h1 align="center" class="MainMenu">Anlık Değerler</h1>
     <div align="left" style="padding:0px 0px 10px 0px"><span class="Time" id="clock" >&nbsp;</span> </div>
+    <div align="left" style="padding:0px 0px 10px 0px"><span class="Time" ><?php echo $temp ?></span></div>
 	</body>
 </html>

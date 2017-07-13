@@ -53,11 +53,15 @@ color:#EEEEEE;
     <div align="left" style="padding:0px 0px 10px 0px"><span class="Time" id="clock" >&nbsp;</span> 
     <span>
     <?php
-		ini_set('max_execution_time', 300);
-		include "php_serial.class.php";
+		set_time_limit(0);
+		include "PhpSerial.php";
 		$serial = new phpSerial;
 		$serial->deviceSet("COM3");
 		$serial->confBaudRate(9600);
+		$serial->confParity("none");
+		$serial->confCharacterLength(8);
+		$serial->confStopBits(1);
+		$serial->confFlowControl("none");
 		
 		$serial->deviceOpen();
 		

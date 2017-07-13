@@ -8,7 +8,6 @@
 		<link rel="stylesheet" type="text/css" href="main.css">
             <script type="text/javascript">
 <!--
-
 function updateClock ( )
 {
   var currentTime = new Date ( );
@@ -43,32 +42,33 @@ color:#EEEEEE;
 }
             </style>
             
-            
-<?php
-//File to read
-$file = '/sys/devices/w1_bus_master1/10-000802292522/w1_slave';
-
-//Read the file line by line
-$lines = file($file);
-
-//Get the temp from second line 
-$temp = explode('=', $lines[1]);
-
-//Setup some nice formatting (i.e. 21,3)
-$temp = number_format($temp[1] / 1000, 1, ',', '');
-
-//And echo that temp
-echo $temp . " °C";
-?>
 </head>
-	<body onload="updateClock(); setInterval('updateClock()', 1000 )">
+	<body onLoad="updateClock(); setInterval('updateClock()', 1000 )">
 
    	<div class="divHeader">
 	  <h1 class="Header" >Raspberry Pi Hava İstasyonu</h1>
     </div>
         	
     <h1 align="center" class="MainMenu">Anlık Değerler</h1>
-    <div align="left" style="padding:0px 0px 10px 0px"><span class="Time" id="clock" >&nbsp;</span> </div>
-    <div align="left" style="padding:0px 0px 10px 0px"><span class="Time" ><?php echo $temp ?></span></div>
+    <div align="left" style="padding:0px 0px 10px 0px"><span class="Time" id="clock" >&nbsp;</span> 
+    <span>
+    <?php
+		ini_set('max_execution_time', 300);
+		include "php_serial.class.php";
+		$serial = new phpSerial;
+		$serial->deviceSet("COM3");
+		$serial->confBaudRate(9600);
+		
+		$serial->deviceOpen();
+		
+		$read = $serial->readPort();
+		echo $read;
+		sleep(1);
+		$serial->deviceClose();
+		
+	
+	?>
+	</span>
+    </div>
 	</body>
 </html>
